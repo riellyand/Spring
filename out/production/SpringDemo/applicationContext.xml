@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- set方式注入 -->
+    <!--将user对象交给spring容器管理 -->
+    <!-- scope singleton 单例默认 只只存在一个实例  /////  prototype 多例 (struts2 ActionBean)-->
+    <bean name="user" class="bean.User" scope="singleton" init-method="init" destroy-method="destroy">
+       <!--为user对象中名为name的属性注入tom作为值-->
+        <property name="name" value="tom"></property>
+        <property name="car" ref="car"/>
+    </bean>
+    <bean name="car" class="bean.Car">
+        <property name="name" value="兰博基尼" />
+        <property name="color" value="黄色"/>
+    </bean>
+
+    <bean name="car1" class="bean.Car" >
+        <constructor-arg name="name" value="宝马" index="0" type="java.lang.String"/>
+        <constructor-arg name="color" value="白色" index="1"/>
+
+    </bean>
+
+    <!-- 复杂类型注入 -->
+    <bean name="cb" class="bean.CollectionBean">
+        <!-- array 注入 -->
+        <property name="arr">
+            <array>
+                <value>tom</value>
+                <value>jerry</value>
+                <ref bean="user"/>
+            </array>
+        </property>
+        <!-- list 注入 -->
+        <property name="list">
+            <list>
+                <value>jack</value>
+                <value>rose</value>
+                <ref bean="user"/>
+            </list>
+        </property>
+        <!-- map类型注入-->
+        <property name="map">
+            <map>
+                <entry key="url" value="jdbc:mysql"></entry>
+                <entry key="user" value-ref="user"></entry>
+                <entry key-ref="user" value-ref="car1"></entry>
+            </map>
+        </property>
+        <!-- properties 类型注入-->
+        <property name="prop">
+            <props>
+                <prop key="driverClass">com.jdbc</prop>
+                <prop key="username">root</prop>
+            </props>
+        </property>
+    </bean>
+<!--导入其他配置未见-->
+ <!--<import resource="applicationContext.xml"/>-->
+</beans>
